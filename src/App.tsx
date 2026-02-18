@@ -1,4 +1,4 @@
-import { MantineProvider, createTheme } from "@mantine/core";
+import { createTheme, MantineProvider } from "@mantine/core";
 import { Route, Switch } from "wouter";
 import { Entry } from "./pages/Entry/Entry";
 import { Entries } from "./pages/entries/Entries";
