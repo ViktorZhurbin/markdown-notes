@@ -24,6 +24,7 @@ export const EditorToolbar = ({ entryId }: { entryId: string }) => (
 
     <RichTextEditor.ControlsGroup>
       <RichTextEditor.Bold />
+      <RichTextEditor.Code />
       <RichTextEditor.Italic />
       <RichTextEditor.Underline />
       <RichTextEditor.Strikethrough />
