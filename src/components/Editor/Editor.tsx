@@ -8,6 +8,7 @@ import TextAlign from "@tiptap/extension-text-align";
 import { Markdown } from "@tiptap/markdown";
 import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import { useEffect } from "react";
 import { PasteMarkdown } from "../../tiptap/PasteMarkdown";
 import { CopyMdButton } from "../CopyMdButton";
 import { MoreOptionsMenu } from "../MoreOptionsMenu";
@@ -50,6 +51,12 @@ export const Editor = ({
       onUpdate?.(editor.getHTML());
     },
   });
+
+  useEffect(() => {
+    if (editor && content !== editor.getHTML()) {
+      editor.commands.setContent(content);
+    }
+  }, [editor, content]);
 
   return (
     <RichTextEditor
