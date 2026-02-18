@@ -8,7 +8,9 @@
     "build": "rsbuild build",
     "preview": "rsbuild preview",
     "format": "biome check --write",
-    "bundle-analyze": "BUNDLE_ANALYZE=true pnpm run build"
+    "bundle-analyze": "BUNDLE_ANALYZE=true bun run build",
+    "dev:rsdoctor": "RSDOCTOR=true rsbuild dev",
+    "build:rsdoctor": "RSDOCTOR=true rsbuild build"
   },
   "dependencies": {
     "@instantdb/react": "^0.17.12",
@@ -31,6 +33,7 @@
     "@biomejs/biome": "2.4.2",
     "@rsbuild/core": "^1.7.3",
     "@rsbuild/plugin-react": "^1.4.5",
+    "@rsdoctor/rspack-plugin": "^1.5.2",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "typescript": "~5.7.3"
