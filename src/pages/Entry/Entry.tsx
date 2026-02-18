@@ -1,7 +1,8 @@
-import { ActionIcon, Group } from "@mantine/core";
+import { ActionIcon, Group, Stack } from "@mantine/core";
 import { IconArrowLeft, IconTrash } from "@tabler/icons-react";
 import { navigate } from "wouter/use-browser-location";
 import { Editor } from "../../components/Editor/Editor";
+import { ThemeToggle } from "../../components/ThemeToggle/ThemeToggle";
 import { db } from "../../db/instant";
 import { deleteEntry, updateEntry } from "../../db/records/crud";
 import styles from "./Entry.module.css";
@@ -42,14 +43,20 @@ export function Entry({ entryId }: { entryId: string }) {
 
   return (
     <div className={styles.wrapper}>
-      <Group justify="space-between">
-        <ActionIcon variant="default" onClick={goBack}>
-          <IconArrowLeft />
-        </ActionIcon>
-        <ActionIcon variant="default" onClick={handleDelete}>
-          <IconTrash />
-        </ActionIcon>
-      </Group>
+      <Stack>
+        <Group justify="space-between">
+          <ActionIcon variant="default" onClick={goBack}>
+            <IconArrowLeft />
+          </ActionIcon>
+          <ThemeToggle />
+        </Group>
+        <Group justify="space-between">
+          <div />
+          <ActionIcon variant="default" onClick={handleDelete}>
+            <IconTrash />
+          </ActionIcon>
+        </Group>
+      </Stack>
 
       <Editor content={text} onUpdate={handleUpdate} />
     </div>

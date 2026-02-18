@@ -1,5 +1,6 @@
-import { Affix, Stack } from "@mantine/core";
+import { Affix, Group, Stack } from "@mantine/core";
 import { CreateButton } from "../../components/CreateButton/CreateButton";
+import { ThemeToggle } from "../../components/ThemeToggle/ThemeToggle";
 import { db } from "../../db/instant";
 import { EntryItem } from "./EntryItem/EntryItem";
 
@@ -15,6 +16,9 @@ export function Entries() {
 
   return (
     <div>
+      <Group justify="flex-end" mb="sm">
+        <ThemeToggle />
+      </Group>
       <Stack gap="sm">
         {data.entries
           .toSorted((a, b) => b.createdAt.localeCompare(a.createdAt))
