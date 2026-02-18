@@ -1,10 +1,13 @@
+import { ActionIcon } from "@mantine/core";
 import {
   Link,
   RichTextEditor,
   type RichTextEditorProps,
 } from "@mantine/tiptap";
+import { IconCopy } from "@tabler/icons-react";
 import Highlight from "@tiptap/extension-highlight";
 import TextAlign from "@tiptap/extension-text-align";
+import { Markdown } from "@tiptap/markdown";
 import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 
@@ -16,6 +19,7 @@ const extensions = [
     defaultAlignment: "left",
     types: ["heading", "paragraph"],
   }),
+  Markdown,
 ];
 
 type EditorProps = {
@@ -40,6 +44,11 @@ export const Editor = ({
       onUpdate?.(editor.getHTML());
     },
   });
+
+  const handleCopyMd = () => {
+    const markdown = editor.getMarkdown();
+    navigator.clipboard.writeText(markdown);
+  };
 
   return (
     <RichTextEditor
@@ -82,6 +91,10 @@ export const Editor = ({
             <RichTextEditor.Undo />
             <RichTextEditor.Redo />
           </RichTextEditor.ControlsGroup>
+
+          <ActionIcon variant="subtle" onClick={handleCopyMd}>
+            <IconCopy />
+          </ActionIcon>
         </RichTextEditor.Toolbar>
       )}
 
