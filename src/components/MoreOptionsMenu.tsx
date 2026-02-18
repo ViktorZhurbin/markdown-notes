@@ -1,9 +1,9 @@
 import { Menu } from "@mantine/core";
 import { RichTextEditor } from "@mantine/tiptap";
-import { IconDotsVertical, IconTrash } from "@tabler/icons-react";
+import { IconDotsVertical, IconTrash, IconX } from "@tabler/icons-react";
 import { useState } from "react";
 import { navigate } from "wouter/use-browser-location";
-import { deleteEntry } from "../db/records/crud";
+import { deleteEntry, updateEntry } from "../db/records/crud";
 
 export const MoreOptionsMenu = (props: { entryId: string }) => {
   const [opened, setOpened] = useState(false);
@@ -11,6 +11,10 @@ export const MoreOptionsMenu = (props: { entryId: string }) => {
   const handleDelete = () => {
     deleteEntry(props.entryId);
     navigate("/");
+  };
+
+  const handleClear = () => {
+    updateEntry(props.entryId, "");
   };
 
   return (
@@ -22,6 +26,9 @@ export const MoreOptionsMenu = (props: { entryId: string }) => {
       </Menu.Target>
 
       <Menu.Dropdown>
+        <Menu.Item color="yellow" leftSection={<IconX />} onClick={handleClear}>
+          Clear
+        </Menu.Item>
         <Menu.Item
           color="red"
           leftSection={<IconTrash />}
