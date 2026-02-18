@@ -44,6 +44,7 @@ export const Editor = ({
     shouldRerenderOnTransaction: true,
     extensions,
     editable,
+    autofocus: !content,
     content: content,
     onUpdate: ({ editor }) => {
       onUpdate?.(editor.getHTML());

@@ -32,14 +32,10 @@ export function Entry({ entryId }: { entryId: string }) {
     updateEntry(entryId, text);
   };
 
-  const goBack = () => {
-    navigate("/");
-  };
-
   return (
     <div className={styles.wrapper}>
       <Group justify="space-between" p="1rem 0.5rem 0 0.5rem">
-        <ActionIcon variant="default" onClick={goBack} size="lg">
+        <ActionIcon variant="default" onClick={() => navigate("/")} size="lg">
           <IconArrowLeft />
         </ActionIcon>
         <ThemeToggle />
