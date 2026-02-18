@@ -1,7 +1,26 @@
 .editor {
   border: none;
 
-  :global(.mantine-RichTextEditor-controlsGroup) {
+  /* :global(.mantine-RichTextEditor-controlsGroup) {
     gap: 4px;
+  } */
+}
+
+.toolbar:is(.toolbar) {
+  /* border-radius: unset; */
+  border-top-width: 1px;
+  border-top-style: solid;
+
+  flex-wrap: nowrap;
+  overflow: auto;
+  max-width: 100dvw;
+
+  &::-webkit-scrollbar {
+    display: none;
   }
+
+  /* 2. For Firefox */
+  scrollbar-width: none;
+
+  padding: 8px 16px;
 }
