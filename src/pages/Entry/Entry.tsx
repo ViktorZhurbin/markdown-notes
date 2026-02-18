@@ -7,12 +7,12 @@ import { db } from "../../db/instant";
 import { updateEntry } from "../../db/records/crud";
 import styles from "./Entry.module.css";
 
-export function Entry({ entryId }: { entryId: string }) {
+export const Entry = (props: { entryId: string }) => {
   const { isLoading, error, data } = db.useQuery({
     entries: {
       $: {
         where: {
-          id: entryId,
+          id: props.entryId,
         },
       },
     },
@@ -29,7 +29,7 @@ export function Entry({ entryId }: { entryId: string }) {
   const { text } = data.entries[0] ?? {};
 
   const handleUpdate = (text: string) => {
-    updateEntry(entryId, text);
+    updateEntry(props.entryId, text);
   };
 
   return (
@@ -41,7 +41,11 @@ export function Entry({ entryId }: { entryId: string }) {
         <ThemeToggle />
       </Group>
 
-      <Editor entryId={entryId} content={text} onUpdate={handleUpdate} />
+      <Editor
+        entryId={props.entryId}
+        content={text ?? ""}
+        onUpdate={handleUpdate}
+      />
     </div>
   );
-}
+};

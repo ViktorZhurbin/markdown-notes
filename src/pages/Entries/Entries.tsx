@@ -4,7 +4,7 @@ import { ThemeToggle } from "../../components/ThemeToggle/ThemeToggle";
 import { db } from "../../db/instant";
 import { EntryItem } from "./EntryItem";
 
-export function Entries() {
+export const Entries = () => {
   const { isLoading, error, data } = db.useQuery({ entries: {} });
   if (isLoading) {
     return "Loading...";
@@ -31,4 +31,4 @@ export function Entries() {
       </Affix>
     </div>
   );
-}
+};

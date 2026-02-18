@@ -27,7 +27,7 @@ type EditorProps = {
 };
 
 export const Editor = ({
-  content = "",
+  content,
   entryId,
   editable = true,
   classNames,

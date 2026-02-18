@@ -40,10 +40,5 @@ export const EditorToolbar = ({ entryId }: { entryId: string }) => (
       <RichTextEditor.Link />
       <RichTextEditor.Unlink />
     </RichTextEditor.ControlsGroup>
-
-    {/* <RichTextEditor.ControlsGroup>
-      <RichTextEditor.ClearFormatting />
-      <RichTextEditor.Highlight />
-    </RichTextEditor.ControlsGroup> */}
   </RichTextEditor.Toolbar>
 );

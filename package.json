@@ -1,14 +1,13 @@
 {
-  "name": "journal",
+  "name": "my-notes",
   "private": true,
   "type": "module",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "scripts": {
     "dev": "rsbuild dev --port 5173",
     "build": "rsbuild build",
     "preview": "rsbuild preview",
     "format": "biome check --write",
-    "bundle-analyze": "BUNDLE_ANALYZE=true bun run build",
     "dev:rsdoctor": "RSDOCTOR=true rsbuild dev",
     "build:rsdoctor": "RSDOCTOR=true rsbuild build"
   },

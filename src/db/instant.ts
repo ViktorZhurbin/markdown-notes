@@ -9,7 +9,7 @@ const schema = i.schema({
     entries: i.entity({
       text: i.string(),
       createdAt: i.string(),
-      updatedAt: i.date(),
+      updatedAt: i.string(),
     }),
   },
 });
