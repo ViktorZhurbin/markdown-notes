@@ -1,7 +1,7 @@
-import { Button } from "@mantine/core";
+import { ActionIcon } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { navigate } from "wouter/use-browser-location";
-import { addEntry } from "../../db/records/crud";
+import { addEntry } from "../db/records/crud";
 
 export const CreateButton = () => {
   const onClick = () => {
@@ -11,8 +11,8 @@ export const CreateButton = () => {
   };
 
   return (
-    <Button leftSection={<IconPlus />} onClick={onClick}>
-      New
-    </Button>
+    <ActionIcon onClick={onClick} size="lg">
+      <IconPlus />
+    </ActionIcon>
   );
 };

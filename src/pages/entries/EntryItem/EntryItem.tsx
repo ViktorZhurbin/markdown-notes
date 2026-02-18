@@ -20,8 +20,8 @@ export const EntryItem = ({ entry }: { entry: Entry }) => {
         label: styles.buttonLabel,
       }}
     >
-      {/* <Text fw={500}>{entry.createdAt}</Text> */}
       <Editor
+        entryId={entry.id}
         content={entry.text}
         editable={false}
         classNames={{ root: styles.editorRoot, content: styles.editorContent }}

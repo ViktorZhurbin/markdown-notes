@@ -1,15 +1,17 @@
-import { ActionIcon } from "@mantine/core";
 import {
   Link,
   RichTextEditor,
   type RichTextEditorProps,
 } from "@mantine/tiptap";
-import { IconCopy } from "@tabler/icons-react";
 import Highlight from "@tiptap/extension-highlight";
 import TextAlign from "@tiptap/extension-text-align";
 import { Markdown } from "@tiptap/markdown";
-import { useEditor } from "@tiptap/react";
+import { EditorContext, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import { useMemo } from "react";
+import { CopyMdButton } from "../CopyMdButton";
+import { MoreOptionsMenu } from "../MoreOptionsMenu";
+import styles from "./Editor.module.css";
 
 const extensions = [
   StarterKit.configure({ link: false }),
@@ -24,6 +26,7 @@ const extensions = [
 
 type EditorProps = {
   content: string;
+  entryId: string;
   editable?: boolean;
   classNames?: RichTextEditorProps["classNames"];
   onUpdate?: (text: string) => void;
@@ -31,6 +34,7 @@ type EditorProps = {
 
 export const Editor = ({
   content = "",
+  entryId,
   editable = true,
   classNames,
   onUpdate,
@@ -45,60 +49,63 @@ export const Editor = ({
     },
   });
 
-  const handleCopyMd = () => {
-    const markdown = editor.getMarkdown();
-    navigator.clipboard.writeText(markdown);
-  };
+  const providerValue = useMemo(() => ({ editor }), [editor]);
 
   return (
-    <RichTextEditor
-      editor={editor}
-      classNames={classNames} /* variant="subtle" */
-    >
-      {editable && (
-        <RichTextEditor.Toolbar>
-          <RichTextEditor.ControlsGroup>
-            <RichTextEditor.Bold />
-            <RichTextEditor.Italic />
-            <RichTextEditor.Underline />
-            <RichTextEditor.Strikethrough />
-          </RichTextEditor.ControlsGroup>
+    <EditorContext.Provider value={providerValue}>
+      <RichTextEditor
+        editor={editor}
+        classNames={classNames}
+        variant="subtle"
+        className={styles.editor}
+      >
+        {editable && (
+          <RichTextEditor.Toolbar sticky>
+            <RichTextEditor.ControlsGroup>
+              <RichTextEditor.Bold />
+              <RichTextEditor.Italic />
+              <RichTextEditor.Underline />
+              <RichTextEditor.Strikethrough />
+            </RichTextEditor.ControlsGroup>
 
-          {/* <RichTextEditor.ControlsGroup>
+            {/* <RichTextEditor.ControlsGroup>
             <RichTextEditor.H1 />
             <RichTextEditor.H2 />
             <RichTextEditor.H3 />
             <RichTextEditor.H4 />
           </RichTextEditor.ControlsGroup> */}
 
-          <RichTextEditor.ControlsGroup>
-            <RichTextEditor.Blockquote />
-            <RichTextEditor.BulletList />
-            <RichTextEditor.OrderedList />
-          </RichTextEditor.ControlsGroup>
+            <RichTextEditor.ControlsGroup>
+              <RichTextEditor.Blockquote />
+              <RichTextEditor.Hr />
+              <RichTextEditor.BulletList />
+              <RichTextEditor.OrderedList />
+            </RichTextEditor.ControlsGroup>
 
-          <RichTextEditor.ControlsGroup>
-            <RichTextEditor.Link />
-            <RichTextEditor.Unlink />
-          </RichTextEditor.ControlsGroup>
+            <RichTextEditor.ControlsGroup>
+              <RichTextEditor.Link />
+              <RichTextEditor.Unlink />
+            </RichTextEditor.ControlsGroup>
 
-          <RichTextEditor.ControlsGroup>
-            <RichTextEditor.ClearFormatting />
-            <RichTextEditor.Highlight />
-          </RichTextEditor.ControlsGroup>
+            <RichTextEditor.ControlsGroup>
+              <RichTextEditor.ClearFormatting />
+              <RichTextEditor.Highlight />
+            </RichTextEditor.ControlsGroup>
 
-          <RichTextEditor.ControlsGroup>
-            <RichTextEditor.Undo />
-            <RichTextEditor.Redo />
-          </RichTextEditor.ControlsGroup>
+            <RichTextEditor.ControlsGroup>
+              <RichTextEditor.Undo />
+              <RichTextEditor.Redo />
+            </RichTextEditor.ControlsGroup>
 
-          <ActionIcon variant="subtle" onClick={handleCopyMd}>
-            <IconCopy />
-          </ActionIcon>
-        </RichTextEditor.Toolbar>
-      )}
+            <RichTextEditor.ControlsGroup style={{ marginInline: "auto 2rem" }}>
+              <CopyMdButton />
+              <MoreOptionsMenu entryId={entryId} />
+            </RichTextEditor.ControlsGroup>
+          </RichTextEditor.Toolbar>
+        )}
 
-      <RichTextEditor.Content />
-    </RichTextEditor>
+        <RichTextEditor.Content />
+      </RichTextEditor>
+    </EditorContext.Provider>
   );
 };

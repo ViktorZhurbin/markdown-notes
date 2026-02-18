@@ -16,7 +16,13 @@ const schema = i.schema({
 
 type Entry = InstaQLEntity<typeof schema, "entries">;
 
-const db = init({ appId: APP_ID, schema });
+const db = init({
+  appId: APP_ID,
+  schema,
+  devtool: {
+    position: "bottom-left",
+  },
+});
 
 export { db };
 
