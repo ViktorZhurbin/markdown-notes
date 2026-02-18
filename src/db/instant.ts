@@ -8,7 +8,7 @@ const schema = i.schema({
   entities: {
     entries: i.entity({
       text: i.string(),
-      createdAt: i.date(),
+      createdAt: i.string(),
       updatedAt: i.date(),
     }),
   },

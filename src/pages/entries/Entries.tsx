@@ -16,9 +16,11 @@ export function Entries() {
   return (
     <div>
       <Stack gap="sm">
-        {data.entries.map((entry) => (
-          <EntryItem key={entry.id} entry={entry} />
-        ))}
+        {data.entries
+          .toSorted((a, b) => b.createdAt.localeCompare(a.createdAt))
+          .map((entry) => (
+            <EntryItem key={entry.id} entry={entry} />
+          ))}
       </Stack>
       <Affix position={{ bottom: 20, right: 20 }}>
         <CreateButton />

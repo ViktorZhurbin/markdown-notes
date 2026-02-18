@@ -1,4 +1,4 @@
-import { Button, Text } from "@mantine/core";
+import { Button } from "@mantine/core";
 import { Link } from "wouter";
 import { Editor } from "../../../components/Editor/Editor";
 import type { Entry } from "../../../db/instant";
@@ -20,7 +20,7 @@ export const EntryItem = ({ entry }: { entry: Entry }) => {
         label: styles.buttonLabel,
       }}
     >
-      <Text fw={500}>{entry.createdAt}</Text>
+      {/* <Text fw={500}>{entry.createdAt}</Text> */}
       <Editor
         content={entry.text}
         editable={false}
