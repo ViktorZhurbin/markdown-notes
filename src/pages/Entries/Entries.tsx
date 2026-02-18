@@ -2,7 +2,7 @@ import { Affix, Group, Stack } from "@mantine/core";
 import { CreateButton } from "../../components/CreateButton";
 import { ThemeToggle } from "../../components/ThemeToggle/ThemeToggle";
 import { db } from "../../db/instant";
-import { EntryItem } from "./EntryItem/EntryItem";
+import { EntryItem } from "./EntryItem";
 
 export function Entries() {
   const { isLoading, error, data } = db.useQuery({ entries: {} });

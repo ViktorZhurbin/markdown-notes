@@ -1,7 +1,7 @@
 import { Button } from "@mantine/core";
 import { Link } from "wouter";
-import { Editor } from "../../../components/Editor/Editor";
-import type { Entry } from "../../../db/instant";
+import { Editor } from "../../components/Editor/Editor";
+import type { Entry } from "../../db/instant";
 import styles from "./EntryItem.module.css";
 
 export const EntryItem = ({ entry }: { entry: Entry }) => {
