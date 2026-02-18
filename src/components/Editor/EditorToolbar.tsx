@@ -11,6 +11,18 @@ export const EditorToolbar = ({ entryId }: { entryId: string }) => (
     </RichTextEditor.ControlsGroup>
 
     <RichTextEditor.ControlsGroup>
+      <RichTextEditor.Undo />
+      <RichTextEditor.Redo />
+    </RichTextEditor.ControlsGroup>
+
+    <RichTextEditor.ControlsGroup>
+      <RichTextEditor.H1 />
+      <RichTextEditor.H2 />
+      <RichTextEditor.H3 />
+      <RichTextEditor.H4 />
+    </RichTextEditor.ControlsGroup>
+
+    <RichTextEditor.ControlsGroup>
       <RichTextEditor.Bold />
       <RichTextEditor.Italic />
       <RichTextEditor.Underline />
@@ -20,7 +32,7 @@ export const EditorToolbar = ({ entryId }: { entryId: string }) => (
     <RichTextEditor.ControlsGroup>
       <RichTextEditor.Blockquote />
       <RichTextEditor.Hr />
-      {/* <RichTextEditor.BulletList /> */}
+      <RichTextEditor.BulletList />
       <RichTextEditor.OrderedList />
     </RichTextEditor.ControlsGroup>
 
@@ -33,10 +45,5 @@ export const EditorToolbar = ({ entryId }: { entryId: string }) => (
       <RichTextEditor.ClearFormatting />
       <RichTextEditor.Highlight />
     </RichTextEditor.ControlsGroup> */}
-
-    <RichTextEditor.ControlsGroup>
-      <RichTextEditor.Undo />
-      <RichTextEditor.Redo />
-    </RichTextEditor.ControlsGroup>
   </RichTextEditor.Toolbar>
 );
