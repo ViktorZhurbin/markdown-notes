@@ -5,13 +5,11 @@ import {
 } from "@mantine/tiptap";
 import Highlight from "@tiptap/extension-highlight";
 import TextAlign from "@tiptap/extension-text-align";
-import Underline from "@tiptap/extension-underline";
 import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 
 const extensions = [
-  StarterKit,
-  Underline,
+  StarterKit.configure({ link: false }),
   Link,
   Highlight,
   TextAlign.configure({
@@ -34,6 +32,7 @@ export const Editor = ({
   onUpdate,
 }: EditorProps) => {
   const editor = useEditor({
+    shouldRerenderOnTransaction: true,
     extensions,
     editable,
     content: content,
@@ -43,7 +42,10 @@ export const Editor = ({
   });
 
   return (
-    <RichTextEditor editor={editor} classNames={classNames} variant="subtle">
+    <RichTextEditor
+      editor={editor}
+      classNames={classNames} /* variant="subtle" */
+    >
       {editable && (
         <RichTextEditor.Toolbar>
           <RichTextEditor.ControlsGroup>
@@ -51,16 +53,14 @@ export const Editor = ({
             <RichTextEditor.Italic />
             <RichTextEditor.Underline />
             <RichTextEditor.Strikethrough />
-            <RichTextEditor.ClearFormatting />
-            <RichTextEditor.Highlight />
           </RichTextEditor.ControlsGroup>
 
-          <RichTextEditor.ControlsGroup>
+          {/* <RichTextEditor.ControlsGroup>
             <RichTextEditor.H1 />
             <RichTextEditor.H2 />
             <RichTextEditor.H3 />
             <RichTextEditor.H4 />
-          </RichTextEditor.ControlsGroup>
+          </RichTextEditor.ControlsGroup> */}
 
           <RichTextEditor.ControlsGroup>
             <RichTextEditor.Blockquote />
@@ -71,6 +71,11 @@ export const Editor = ({
           <RichTextEditor.ControlsGroup>
             <RichTextEditor.Link />
             <RichTextEditor.Unlink />
+          </RichTextEditor.ControlsGroup>
+
+          <RichTextEditor.ControlsGroup>
+            <RichTextEditor.ClearFormatting />
+            <RichTextEditor.Highlight />
           </RichTextEditor.ControlsGroup>
 
           <RichTextEditor.ControlsGroup>
