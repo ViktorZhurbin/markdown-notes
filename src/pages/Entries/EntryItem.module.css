@@ -3,6 +3,7 @@
   --button-padding-y: 16px;
 
   font-weight: 400;
+  text-align: start;
   box-sizing: border-box;
   height: max-content;
   max-height: var(--button-max-height);

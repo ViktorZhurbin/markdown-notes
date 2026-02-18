@@ -3,8 +3,6 @@ import {
   RichTextEditor,
   type RichTextEditorProps,
 } from "@mantine/tiptap";
-import Highlight from "@tiptap/extension-highlight";
-import TextAlign from "@tiptap/extension-text-align";
 import { Markdown } from "@tiptap/markdown";
 import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -16,11 +14,6 @@ import { EditorToolbar } from "./EditorToolbar";
 const extensions = [
   StarterKit.configure({ link: false }),
   Link,
-  Highlight,
-  TextAlign.configure({
-    defaultAlignment: "left",
-    types: ["heading", "paragraph"],
-  }),
   Markdown,
   PasteMarkdown,
 ];
