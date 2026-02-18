@@ -8,6 +8,7 @@ import TextAlign from "@tiptap/extension-text-align";
 import { Markdown } from "@tiptap/markdown";
 import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import { PasteMarkdown } from "../../tiptap/PasteMarkdown";
 import { CopyMdButton } from "../CopyMdButton";
 import { MoreOptionsMenu } from "../MoreOptionsMenu";
 import styles from "./Editor.module.css";
@@ -21,6 +22,7 @@ const extensions = [
     types: ["heading", "paragraph"],
   }),
   Markdown,
+  PasteMarkdown,
 ];
 
 type EditorProps = {
