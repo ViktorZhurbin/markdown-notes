@@ -12,7 +12,7 @@ export const CopyMdButton = () => {
           style={{ color: copied ? "teal" : undefined }}
           onClick={copy}
         >
-          {copied ? <IconCheck size={16} /> : <IconCopy size={16} />}
+          {copied ? <IconCheck /> : <IconCopy />}
         </RichTextEditor.Control>
       )}
     </CopyButton>

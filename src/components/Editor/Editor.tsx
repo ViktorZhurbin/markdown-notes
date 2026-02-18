@@ -61,7 +61,7 @@ export const Editor = ({
     <RichTextEditor
       editor={editor}
       classNames={classNames}
-      // variant="subtle"
+      variant="subtle"
       className={styles.editor}
     >
       {editable && <EditorToolbar entryId={entryId} />}
