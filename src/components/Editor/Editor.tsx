@@ -1,22 +1,9 @@
-import {
-  Link,
-  RichTextEditor,
-  type RichTextEditorProps,
-} from "@mantine/tiptap";
-import { Markdown } from "@tiptap/markdown";
+import { RichTextEditor, type RichTextEditorProps } from "@mantine/tiptap";
 import { useEditor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
 import { useEffect } from "react";
-import { PasteMarkdown } from "../../tiptap/PasteMarkdown";
+import { extensions } from "../../tiptap/extensions";
 import styles from "./Editor.module.css";
 import { EditorToolbar } from "./EditorToolbar";
-
-const extensions = [
-  StarterKit.configure({ link: false }),
-  Link,
-  Markdown,
-  PasteMarkdown,
-];
 
 type EditorProps = {
   content: string;
