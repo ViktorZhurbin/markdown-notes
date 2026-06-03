@@ -26,14 +26,15 @@ export const Editor = ({
     editable,
     autofocus: !content,
     content: content,
+    contentType: "markdown",
     onUpdate: ({ editor }) => {
-      onUpdate?.(editor.getHTML());
+      onUpdate?.(editor.getMarkdown());
     },
   });
 
   useEffect(() => {
-    if (editor && content !== editor.getHTML()) {
-      editor.commands.setContent(content);
+    if (editor && content !== editor.getMarkdown()) {
+      editor.commands.setContent(content, { contentType: "markdown" });
     }
   }, [editor, content]);
 
