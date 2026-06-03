@@ -12,34 +12,22 @@ export const PasteMarkdown = Extension.create({
           handlePaste(_view, event) {
             const text = event.clipboardData?.getData("text/plain");
 
-            if (!text) {
+            if (!text || !editor.markdown) {
               return false;
             }
 
-            // Check if text looks like Markdown
-            if (editor.markdown && looksLikeMarkdown(text)) {
-              // Parse the Markdown text to Tiptap JSON using the Markdown manager
-              const json = editor.markdown.parse(text);
+            // Always parse pasted text as Markdown so paste is the inverse of
+            // the Markdown we copy out. Falling back to plain-text paste turns
+            // blank lines into real empty paragraphs, which accumulate on each
+            // copy/clear/paste cycle.
+            const json = editor.markdown.parse(text);
 
-              // Insert the parsed JSON content at cursor position
-              editor.commands.insertContent(json);
-              return true;
-            }
-
-            return false;
+            // Insert the parsed JSON content at cursor position
+            editor.commands.insertContent(json);
+            return true;
           },
         },
       }),
     ];
   },
 });
-
-function looksLikeMarkdown(text: string): boolean {
-  // Simple heuristic: check for Markdown syntax
-  return (
-    /^#{1,6}\s/.test(text) || // Headings
-    /\*\*[^*]+\*\*/.test(text) || // Bold
-    /\[.+\]\(.+\)/.test(text) || // Links
-    /^[-*+]\s/.test(text)
-  ); // Lists
-}
