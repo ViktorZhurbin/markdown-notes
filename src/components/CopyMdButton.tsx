@@ -6,7 +6,7 @@ export const CopyMdButton = () => {
   const { editor } = useRichTextEditorContext();
 
   return (
-    <CopyButton value={editor?.getMarkdown().replace(/&nbsp;/g, "") ?? ""}>
+    <CopyButton value={editor?.getMarkdown() ?? ""}>
       {({ copied, copy }) => (
         <RichTextEditor.Control
           style={{ color: copied ? "teal" : undefined }}
