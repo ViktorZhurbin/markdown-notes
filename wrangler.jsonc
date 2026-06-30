@@ -1,7 +1,7 @@
 {
-	"name": "markdown-notes",
-	"compatibility_date": "2026-04-01",
-	"assets": {
-		"directory": "./dist/"
-	}
+  "name": "markdown-notes",
+  "compatibility_date": "2026-04-01",
+  "assets": {
+    "directory": "./dist/"
+  }
 }
