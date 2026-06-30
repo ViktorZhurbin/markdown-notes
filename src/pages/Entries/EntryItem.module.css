@@ -1,23 +1,27 @@
-.buttonRoot {
-  --button-max-height: 160px;
-  --button-padding-y: 16px;
-
-  font-weight: 400;
-  line-height: unset;
-  text-align: start;
-  box-sizing: border-box;
-  height: max-content;
-  max-height: var(--button-max-height);
-  padding-block: var(--button-padding-y);
+.card {
+  position: relative;
+  max-height: 160px;
+  overflow: hidden;
+  cursor: pointer;
 }
 
-.buttonLabel {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
-  gap: 12px;
-  max-height: calc(var(--button-max-height) - var(--button-padding-y) * 2);
+.card:hover {
+  background-color: var(--mantine-color-default-hover);
+}
+
+/* Covers the whole card so clicking anywhere (except the delete control,
+   which sits above via z-index) navigates to the entry. */
+.link {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.deleteButton {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 2;
 }
 
 .editorRoot {
@@ -25,6 +29,8 @@
 
   :global(.tiptap.ProseMirror) {
     padding: 0;
+    /* Keep preview text clear of the delete button in the corner. */
+    padding-right: 28px;
   }
 }
 
