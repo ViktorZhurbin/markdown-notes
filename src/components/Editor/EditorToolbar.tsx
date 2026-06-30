@@ -1,7 +1,7 @@
 import { RichTextEditor } from "@mantine/tiptap";
 import { useEffect, useRef } from "react";
 import { CopyMdButton } from "../CopyMdButton";
-import { MoreOptionsMenu } from "../MoreOptionsMenu";
+import { EntryActions } from "../EntryActions";
 import styles from "./EditorToolbar.module.css";
 
 export const EditorToolbar = ({ entryId }: { entryId: string }) => {
@@ -38,7 +38,7 @@ export const EditorToolbar = ({ entryId }: { entryId: string }) => {
     <RichTextEditor.Toolbar sticky ref={toolbarRef} className={styles.toolbar}>
       <RichTextEditor.ControlsGroup>
         <CopyMdButton />
-        <MoreOptionsMenu entryId={entryId} />
+        <EntryActions entryId={entryId} />
       </RichTextEditor.ControlsGroup>
 
       <RichTextEditor.ControlsGroup>

@@ -1,7 +1,8 @@
-import { ActionIcon, Button, Card, Group, Modal, Text } from "@mantine/core";
+import { ActionIcon, Card } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconTrash } from "@tabler/icons-react";
 import { Link } from "wouter";
+import { ConfirmModal } from "../../components/ConfirmModal";
 import { Editor } from "../../components/Editor/Editor";
 import type { Entry } from "../../db/instant";
 import { deleteEntry } from "../../db/records/crud";
@@ -38,26 +39,14 @@ export const EntryItem = ({ entry }: { entry: Entry }) => {
         <IconTrash size={24} />
       </ActionIcon>
 
-      <Modal
+      <ConfirmModal
         opened={confirmOpen}
         onClose={close}
+        onConfirm={() => deleteEntry(entry.id)}
         title="Delete note"
-        centered
-        radius="md"
-        size="sm"
-      >
-        <Text size="sm" mb="lg">
-          This can't be undone.
-        </Text>
-        <Group grow gap="sm">
-          <Button variant="default" size="md" onClick={close}>
-            Cancel
-          </Button>
-          <Button color="red" size="md" onClick={() => deleteEntry(entry.id)}>
-            Delete
-          </Button>
-        </Group>
-      </Modal>
+        message="This can't be undone."
+        confirmLabel="Delete"
+      />
     </Card>
   );
 };

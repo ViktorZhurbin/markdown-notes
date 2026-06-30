@@ -1,6 +1,6 @@
 # markdown-notes
 
-A journal/note-taking app with rich-text editing and real-time sync.
+A personal note-taking app with rich-text editing and real-time sync.
 
 ## Stack
 
@@ -14,6 +14,6 @@ A journal/note-taking app with rich-text editing and real-time sync.
 - **InstantDB = state**: `db.useQuery` for reads; all writes go through `db.transact(db.tx...)` in `db/records/crud.ts`
 - **Editor** (`components/Editor/`): takes `content` (markdown string), `entryId`, `editable`, `onUpdate`, optional `classNames`; syncs external content changes via `useEffect` comparing `content !== editor.getMarkdown()`; extensions centralized in `tiptap/extensions.ts`
 - **CSS Modules + Mantine**: Mantine class selectors inside `.module.css` must use `:global()` (e.g. `:global(.mantine-RichTextEditor-control)`) — without it they get hashed and never match
-- `MoreOptionsMenu` uses `RichTextEditor.Control` as its trigger to match toolbar button styling
+- Toolbar action buttons (`EntryActions`, `CopyMdButton`) use `RichTextEditor.Control` so they match the built-in formatting controls; destructive actions route through the shared `ConfirmModal`
 - **No non-null assertions** (`!`) — handle optionals explicitly
 - **No `document.createElement`** — use JSX only
