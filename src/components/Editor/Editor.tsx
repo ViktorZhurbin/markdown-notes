@@ -6,7 +6,7 @@ import { EditorToolbar } from "./EditorToolbar";
 
 type EditorProps = {
   content: string;
-  entryId: string;
+  noteId: string;
   editable?: boolean;
   classNames?: RichTextEditorProps["classNames"];
   onUpdate?: (text: string) => void;
@@ -14,7 +14,7 @@ type EditorProps = {
 
 export const Editor = ({
   content,
-  entryId,
+  noteId,
   editable = true,
   classNames,
   onUpdate,
@@ -39,7 +39,7 @@ export const Editor = ({
 
   return (
     <RichTextEditor editor={editor} classNames={classNames} variant="subtle">
-      {editable && <EditorToolbar entryId={entryId} />}
+      {editable && <EditorToolbar noteId={noteId} />}
 
       <RichTextEditor.Content />
     </RichTextEditor>

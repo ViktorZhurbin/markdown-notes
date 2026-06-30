@@ -5,14 +5,14 @@ import { Editor } from "../../components/Editor/Editor";
 import { ThemeToggle } from "../../components/ThemeToggle/ThemeToggle";
 import { db } from "../../db/instant";
 import { updateEntry } from "../../db/records/crud";
-import styles from "./Entry.module.css";
+import styles from "./Note.module.css";
 
-export const Entry = (props: { entryId: string }) => {
+export const Note = (props: { noteId: string }) => {
   const { isLoading, error, data } = db.useQuery({
     entries: {
       $: {
         where: {
-          id: props.entryId,
+          id: props.noteId,
         },
       },
     },
@@ -29,7 +29,7 @@ export const Entry = (props: { entryId: string }) => {
   const { text } = data.entries[0] ?? {};
 
   const handleUpdate = (text: string) => {
-    updateEntry(props.entryId, text);
+    updateEntry(props.noteId, text);
   };
 
   return (
@@ -42,7 +42,7 @@ export const Entry = (props: { entryId: string }) => {
       </Group>
 
       <Editor
-        entryId={props.entryId}
+        noteId={props.noteId}
         content={text ?? ""}
         onUpdate={handleUpdate}
         classNames={{

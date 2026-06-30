@@ -6,9 +6,9 @@ import { ConfirmModal } from "../../components/ConfirmModal";
 import { Editor } from "../../components/Editor/Editor";
 import type { Entry } from "../../db/instant";
 import { deleteEntry } from "../../db/records/crud";
-import styles from "./EntryItem.module.css";
+import styles from "./NoteCard.module.css";
 
-export const EntryItem = ({ entry }: { entry: Entry }) => {
+export const NoteCard = ({ note }: { note: Entry }) => {
   const [confirmOpen, { open, close }] = useDisclosure(false);
 
   return (
@@ -16,14 +16,14 @@ export const EntryItem = ({ entry }: { entry: Entry }) => {
       {/* Full-card overlay link: keeps the whole card clickable (cmd/middle-click
           still work) while the delete control sits above it via z-index. */}
       <Link
-        href={`/${entry.id}`}
+        href={`/${note.id}`}
         aria-label="Open note"
         className={styles.link}
       />
 
       <Editor
-        entryId={entry.id}
-        content={entry.text}
+        noteId={note.id}
+        content={note.text}
         editable={false}
         classNames={{ root: styles.editorRoot, content: styles.editorContent }}
       />
@@ -42,7 +42,7 @@ export const EntryItem = ({ entry }: { entry: Entry }) => {
       <ConfirmModal
         opened={confirmOpen}
         onClose={close}
-        onConfirm={() => deleteEntry(entry.id)}
+        onConfirm={() => deleteEntry(note.id)}
         title="Delete note"
         message="This can't be undone."
         confirmLabel="Delete"

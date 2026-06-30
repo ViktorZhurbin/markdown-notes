@@ -1,7 +1,7 @@
 import { ColorSchemeScript, createTheme, MantineProvider } from "@mantine/core";
 import { Route, Switch } from "wouter";
-import { Entries } from "./pages/Entries/Entries";
-import { Entry } from "./pages/Entry/Entry";
+import { NoteList } from "./pages/NoteList/NoteList";
+import { Note } from "./pages/Note/Note";
 
 const theme = createTheme({
   /** Put your mantine theme override here */
@@ -13,9 +13,9 @@ export const App = () => {
       <ColorSchemeScript defaultColorScheme="auto" />
       <MantineProvider theme={theme} defaultColorScheme="auto">
         <Switch>
-          <Route path="/" component={Entries} />
-          <Route path="/:entryId">
-            {(params) => <Entry entryId={params.entryId} />}
+          <Route path="/" component={NoteList} />
+          <Route path="/:noteId">
+            {(params) => <Note noteId={params.noteId} />}
           </Route>
 
           {/* Default route in a switch */}

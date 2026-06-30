@@ -1,10 +1,10 @@
 import { RichTextEditor } from "@mantine/tiptap";
 import { useEffect, useRef } from "react";
 import { CopyMdButton } from "../CopyMdButton";
-import { EntryActions } from "../EntryActions";
+import { NoteActions } from "../NoteActions";
 import styles from "./EditorToolbar.module.css";
 
-export const EditorToolbar = ({ entryId }: { entryId: string }) => {
+export const EditorToolbar = ({ noteId }: { noteId: string }) => {
   const toolbarRef = useRef<HTMLDivElement>(null);
 
   /* for sticky toolbar to work on mobile with virtual keyboard on */
@@ -38,7 +38,7 @@ export const EditorToolbar = ({ entryId }: { entryId: string }) => {
     <RichTextEditor.Toolbar sticky ref={toolbarRef} className={styles.toolbar}>
       <RichTextEditor.ControlsGroup>
         <CopyMdButton />
-        <EntryActions entryId={entryId} />
+        <NoteActions noteId={noteId} />
       </RichTextEditor.ControlsGroup>
 
       <RichTextEditor.ControlsGroup>

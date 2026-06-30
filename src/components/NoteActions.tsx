@@ -7,17 +7,17 @@ import { ConfirmModal } from "./ConfirmModal";
 
 type PendingAction = "clear" | "delete" | null;
 
-export const EntryActions = ({ entryId }: { entryId: string }) => {
+export const NoteActions = ({ noteId }: { noteId: string }) => {
   const [pending, setPending] = useState<PendingAction>(null);
 
   const closeModal = () => setPending(null);
 
   const handleClear = () => {
-    updateEntry(entryId, "");
+    updateEntry(noteId, "");
   };
 
   const handleDelete = () => {
-    deleteEntry(entryId);
+    deleteEntry(noteId);
     navigate("/");
   };
 
