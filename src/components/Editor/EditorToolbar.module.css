@@ -1,12 +1,9 @@
 .toolbar {
   &:is(.toolbar) {
-    border-top-width: 1px;
-    border-top-style: solid;
-
     flex-wrap: nowrap;
     overflow: auto;
     max-width: 100dvw;
-    padding: 8px 16px;
+    padding: var(--mantine-spacing-xs);
   }
 
   :global(.mantine-RichTextEditor-control) > svg {

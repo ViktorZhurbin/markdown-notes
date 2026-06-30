@@ -2,7 +2,6 @@ import { RichTextEditor, type RichTextEditorProps } from "@mantine/tiptap";
 import { useEditor } from "@tiptap/react";
 import { useEffect } from "react";
 import { extensions } from "../../tiptap/extensions";
-import styles from "./Editor.module.css";
 import { EditorToolbar } from "./EditorToolbar";
 
 type EditorProps = {
@@ -39,12 +38,7 @@ export const Editor = ({
   }, [editor, content]);
 
   return (
-    <RichTextEditor
-      editor={editor}
-      classNames={classNames}
-      variant="subtle"
-      className={styles.editor}
-    >
+    <RichTextEditor editor={editor} classNames={classNames} variant="subtle">
       {editable && <EditorToolbar entryId={entryId} />}
 
       <RichTextEditor.Content />

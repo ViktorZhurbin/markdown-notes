@@ -3,10 +3,20 @@
   max-height: 160px;
   overflow: hidden;
   cursor: pointer;
+  box-shadow: var(--mantine-shadow-sm);
+  transition:
+    box-shadow 150ms ease,
+    transform 150ms ease;
 }
 
 .card:hover {
-  background-color: var(--mantine-color-default-hover);
+  box-shadow: var(--mantine-shadow-md);
+}
+
+/* Touch devices don't hover — give a press response instead. */
+.card:active {
+  transform: scale(0.99);
+  box-shadow: var(--mantine-shadow-md);
 }
 
 /* Covers the whole card so clicking anywhere (except the delete control,

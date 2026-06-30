@@ -45,6 +45,10 @@ export const Entry = (props: { entryId: string }) => {
         entryId={props.entryId}
         content={text ?? ""}
         onUpdate={handleUpdate}
+        classNames={{
+          root: styles.editorRoot,
+          content: styles.editorContent,
+        }}
       />
     </div>
   );

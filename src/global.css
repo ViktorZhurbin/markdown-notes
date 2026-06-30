@@ -2,6 +2,12 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100dvh;
+  /* Tint the page a step away from --mantine-color-body so the white/dark
+     surfaces (cards, editor) read as raised sheets instead of blending in. */
+  background-color: light-dark(
+    var(--mantine-color-gray-1),
+    var(--mantine-color-dark-8)
+  );
 }
 
 #root {

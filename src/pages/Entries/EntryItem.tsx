@@ -32,7 +32,7 @@ export const EntryItem = ({ entry }: { entry: Entry }) => {
         className={styles.deleteButton}
         variant="subtle"
         size="lg"
-        color="red"
+        color="dray.8"
         aria-label="Delete note"
         onClick={open}
       >
