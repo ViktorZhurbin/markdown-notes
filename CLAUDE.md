@@ -8,6 +8,7 @@ A personal note-taking app with rich-text editing and real-time sync.
 - **Mantine 8** + **Tiptap 3** via `@mantine/tiptap` — editor stores/serializes content as markdown (`contentType: "markdown"`)
 - **InstantDB** (`@instantdb/react`) — real-time DB and the only state layer (no Redux/Context/Zustand)
 - **Wouter** for routing, **Biome** for linting/formatting
+- **Bun** as the package manager — use `bun add` / `bun install` instead of npm/yarn
 
 ## Key patterns
 
