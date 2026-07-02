@@ -8,6 +8,7 @@
     "build": "rsbuild build",
     "preview": "rsbuild preview",
     "format": "biome check --write",
+    "type-check": "tsc --noEmit",
     "dev:rsdoctor": "RSDOCTOR=true rsbuild dev",
     "build:rsdoctor": "RSDOCTOR=true rsbuild build"
   },
@@ -27,7 +28,7 @@
     "wouter": "^3.10.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.4.2",
+    "@biomejs/biome": "2.5.2",
     "@rsbuild/core": "^2.1.2",
     "@rsbuild/plugin-react": "^2.1.0",
     "@rsdoctor/rspack-plugin": "^1.5.17",

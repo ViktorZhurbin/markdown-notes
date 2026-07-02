@@ -26,4 +26,3 @@ export function updateNote(recordId: string, text: string) {
 export function deleteNote(recordId: string) {
   db.transact(db.tx.entries[recordId].delete());
 }
-

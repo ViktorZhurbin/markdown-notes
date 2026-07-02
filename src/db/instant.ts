@@ -14,7 +14,6 @@ const schema = i.schema({
   },
 });
 
-
 export type Note = InstaQLEntity<typeof schema, "entries">;
 
 export const db = init({
@@ -24,5 +23,3 @@ export const db = init({
     position: "bottom-left",
   },
 });
-
-
