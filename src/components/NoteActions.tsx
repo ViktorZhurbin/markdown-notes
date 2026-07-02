@@ -2,7 +2,7 @@ import { RichTextEditor } from "@mantine/tiptap";
 import { IconEraser, IconTrash } from "@tabler/icons-react";
 import { useState } from "react";
 import { navigate } from "wouter/use-browser-location";
-import { deleteEntry, updateEntry } from "../db/records/crud";
+import { deleteNote, updateNote } from "../db/notes/crud";
 import { ConfirmModal } from "./ConfirmModal";
 
 type PendingAction = "clear" | "delete" | null;
@@ -13,11 +13,11 @@ export const NoteActions = ({ noteId }: { noteId: string }) => {
   const closeModal = () => setPending(null);
 
   const handleClear = () => {
-    updateEntry(noteId, "");
+    updateNote(noteId, "");
   };
 
   const handleDelete = () => {
-    deleteEntry(noteId);
+    deleteNote(noteId);
     navigate("/");
   };
 

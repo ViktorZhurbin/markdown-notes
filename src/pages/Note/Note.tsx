@@ -4,7 +4,7 @@ import { navigate } from "wouter/use-browser-location";
 import { Editor } from "../../components/Editor/Editor";
 import { ThemeToggle } from "../../components/ThemeToggle/ThemeToggle";
 import { db } from "../../db/instant";
-import { updateEntry } from "../../db/records/crud";
+import { updateNote } from "../../db/notes/crud";
 import styles from "./Note.module.css";
 
 export const Note = (props: { noteId: string }) => {
@@ -29,7 +29,7 @@ export const Note = (props: { noteId: string }) => {
   const { text } = data.entries[0] ?? {};
 
   const handleUpdate = (text: string) => {
-    updateEntry(props.noteId, text);
+    updateNote(props.noteId, text);
   };
 
   return (

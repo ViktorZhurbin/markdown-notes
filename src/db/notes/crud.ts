@@ -1,7 +1,7 @@
 import { id } from "@instantdb/react";
 import { db } from "../instant";
 
-function addEntry(text = "") {
+export function addNote(text = "") {
   const recordId = id();
 
   db.transact(
@@ -14,7 +14,7 @@ function addEntry(text = "") {
   return recordId;
 }
 
-function updateEntry(recordId: string, text: string) {
+export function updateNote(recordId: string, text: string) {
   db.transact(
     db.tx.entries[recordId].update({
       text,
@@ -23,8 +23,7 @@ function updateEntry(recordId: string, text: string) {
   );
 }
 
-function deleteEntry(recordId: string) {
+export function deleteNote(recordId: string) {
   db.transact(db.tx.entries[recordId].delete());
 }
 
-export { addEntry, updateEntry, deleteEntry };

@@ -4,11 +4,11 @@ import { IconTrash } from "@tabler/icons-react";
 import { Link } from "wouter";
 import { ConfirmModal } from "../../components/ConfirmModal";
 import { Editor } from "../../components/Editor/Editor";
-import type { Entry } from "../../db/instant";
-import { deleteEntry } from "../../db/records/crud";
+import type { Note } from "../../db/instant";
+import { deleteNote } from "../../db/notes/crud";
 import styles from "./NoteCard.module.css";
 
-export const NoteCard = ({ note }: { note: Entry }) => {
+export const NoteCard = ({ note }: { note: Note }) => {
   const [confirmOpen, { open, close }] = useDisclosure(false);
 
   return (
@@ -42,7 +42,7 @@ export const NoteCard = ({ note }: { note: Entry }) => {
       <ConfirmModal
         opened={confirmOpen}
         onClose={close}
-        onConfirm={() => deleteEntry(note.id)}
+        onConfirm={() => deleteNote(note.id)}
         title="Delete note"
         message="This can't be undone."
         confirmLabel="Delete"

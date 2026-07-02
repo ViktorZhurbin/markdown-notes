@@ -14,9 +14,10 @@ const schema = i.schema({
   },
 });
 
-type Entry = InstaQLEntity<typeof schema, "entries">;
 
-const db = init({
+export type Note = InstaQLEntity<typeof schema, "entries">;
+
+export const db = init({
   appId: APP_ID,
   schema,
   devtool: {
@@ -24,6 +25,4 @@ const db = init({
   },
 });
 
-export { db };
 
-export type { Entry };
