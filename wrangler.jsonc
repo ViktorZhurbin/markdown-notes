@@ -1,7 +1,19 @@
 {
+  "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "markdown-notes",
-  "compatibility_date": "2026-04-01",
+  "main": "./worker/index.ts",
+  "compatibility_date": "2026-09-09",
   "assets": {
-    "directory": "./dist/"
-  }
+    "directory": "./dist/",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*"]
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "markdown-notes",
+      "database_id": "4593f689-18a3-4228-9402-96e92a9a900c",
+      "migrations_dir": "./migrations"
+    }
+  ]
 }

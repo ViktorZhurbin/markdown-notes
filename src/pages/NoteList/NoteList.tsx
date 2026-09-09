@@ -1,11 +1,12 @@
 import { Affix, Group, Stack } from "@mantine/core";
 import { CreateButton } from "../../components/CreateButton";
 import { ThemeToggle } from "../../components/ThemeToggle/ThemeToggle";
-import { db } from "../../db/instant";
+import { useNotes } from "../../db/notes/hooks";
 import { NoteCard } from "./NoteCard";
 
 export const NoteList = () => {
-  const { isLoading, error, data } = db.useQuery({ entries: {} });
+  const { isLoading, error, data, refetch } = useNotes();
+
   if (isLoading) {
     return "Loading...";
   }
@@ -20,11 +21,10 @@ export const NoteList = () => {
         <ThemeToggle />
       </Group>
       <Stack gap="sm">
-        {data.entries
-          .toSorted((a, b) => b.createdAt.localeCompare(a.createdAt))
-          .map((note) => (
-            <NoteCard key={note.id} note={note} />
-          ))}
+        {/* Ordered by createdAt DESC in the SQL query. */}
+        {data?.map((note) => (
+          <NoteCard key={note.id} note={note} onDeleted={refetch} />
+        ))}
       </Stack>
       <Affix position={{ bottom: 15, right: 15 }}>
         <CreateButton />

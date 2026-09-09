@@ -11,5 +11,13 @@ export default defineConfig({
     },
   },
 
+  /* rsbuild keeps serving the UI with HMR; /api goes to `wrangler dev`, which
+     holds the D1 binding. Both processes have to be running for local dev. */
+  server: {
+    proxy: {
+      "/api": "http://localhost:8787",
+    },
+  },
+
   plugins: [pluginReact()],
 });

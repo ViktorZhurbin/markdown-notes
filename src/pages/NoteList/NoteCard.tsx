@@ -3,12 +3,18 @@ import { useDisclosure } from "@mantine/hooks";
 import { IconTrash } from "@tabler/icons-react";
 import { Link } from "wouter";
 import { ConfirmModal } from "../../components/ConfirmModal";
-import type { Note } from "../../db/instant";
 import { deleteNote } from "../../db/notes/crud";
+import type { Note } from "../../db/notes/types";
 import { noteTitle } from "../../utils/markdown";
 import styles from "./NoteCard.module.css";
 
-export const NoteCard = ({ note }: { note: Note }) => {
+export const NoteCard = ({
+  note,
+  onDeleted,
+}: {
+  note: Note;
+  onDeleted: () => void;
+}) => {
   const [confirmOpen, { open, close }] = useDisclosure(false);
   const title = noteTitle(note.text);
 
@@ -40,7 +46,8 @@ export const NoteCard = ({ note }: { note: Note }) => {
       <ConfirmModal
         opened={confirmOpen}
         onClose={close}
-        onConfirm={() => deleteNote(note.id)}
+        // Instant re-ran the list query on its own; this asks for the refetch.
+        onConfirm={() => deleteNote(note.id).then(onDeleted)}
         title="Delete note"
         message="This can't be undone."
         confirmLabel="Delete"

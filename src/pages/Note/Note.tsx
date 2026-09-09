@@ -7,22 +7,27 @@ import {
   type NoteMode,
   NoteToolbar,
 } from "../../components/NoteToolbar/NoteToolbar";
-import { db } from "../../db/instant";
 import { deleteNote, updateNote } from "../../db/notes/crud";
+import { useNote } from "../../db/notes/hooks";
 import styles from "./Note.module.css";
 
 const SAVE_DELAY_MS = 500;
 
+/* Route params are strings; ids are the INTEGER primary key. Validating in a
+   wrapper keeps useNote out of the invalid case entirely — a hook inside the
+   loader would still fire a request for /api/notes/NaN before any guard. */
 export const Note = (props: { noteId: string }) => {
-  const { isLoading, error, data } = db.useQuery({
-    entries: {
-      $: {
-        where: {
-          id: props.noteId,
-        },
-      },
-    },
-  });
+  const noteId = Number(props.noteId);
+
+  if (!Number.isInteger(noteId) || noteId <= 0) {
+    return <div>404: No such note</div>;
+  }
+
+  return <NoteLoader key={noteId} noteId={noteId} />;
+};
+
+const NoteLoader = ({ noteId }: { noteId: number }) => {
+  const { isLoading, error, data } = useNote(noteId);
 
   if (isLoading) {
     return "Loading...";
@@ -32,21 +37,20 @@ export const Note = (props: { noteId: string }) => {
     return <div>Error querying data: {error.message}</div>;
   }
 
-  const { text } = data.entries[0] ?? {};
+  if (!data) {
+    return <div>404: No such note</div>;
+  }
 
-  return (
-    <NoteView key={props.noteId} noteId={props.noteId} text={text ?? ""} />
-  );
+  return <NoteView noteId={noteId} text={data.text} />;
 };
 
-const NoteView = ({ noteId, text }: { noteId: string; text: string }) => {
+const NoteView = ({ noteId, text }: { noteId: number; text: string }) => {
   const [mode, setMode] = useState<NoteMode>("edit");
   const [draft, setDraft] = useState(text);
 
-  /* The last value this tab sent. When our own write echoes back through the
-     query it equals this ref, so the textarea keeps whatever has been typed
-     since. A value we did not send came from another device and replaces the
-     draft. */
+  /* The last value this tab sent. When our own write comes back on a refetch
+     it equals this ref, so the textarea keeps whatever has been typed since. A
+     value we did not send came from another device and replaces the draft. */
   const lastSentRef = useRef(text);
 
   useEffect(() => {

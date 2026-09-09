@@ -1,31 +1,28 @@
-import { ColorSchemeScript, MantineProvider } from "@mantine/core";
+import { ColorSchemeScript, createTheme, MantineProvider } from "@mantine/core";
 import { Route, Switch } from "wouter";
-import { db } from "./db/instant";
-import { Login } from "./pages/Login/Login";
 import { Note } from "./pages/Note/Note";
 import { NoteList } from "./pages/NoteList/NoteList";
 
-import { theme } from "./theme";
+const theme = createTheme({
+  /** Put your mantine theme override here */
+});
 
+/* No sign-in UI: Cloudflare Access authenticates before any request reaches
+   the Worker or the static assets. */
 export const App = () => {
   return (
     <>
       <ColorSchemeScript defaultColorScheme="auto" />
       <MantineProvider theme={theme} defaultColorScheme="auto">
-        <db.SignedIn>
-          <Switch>
-            <Route path="/" component={NoteList} />
-            <Route path="/:noteId">
-              {(params) => <Note noteId={params.noteId} />}
-            </Route>
+        <Switch>
+          <Route path="/" component={NoteList} />
+          <Route path="/:noteId">
+            {(params) => <Note noteId={params.noteId} />}
+          </Route>
 
-            {/* Default route in a switch */}
-            <Route>404: No such page!</Route>
-          </Switch>
-        </db.SignedIn>
-        <db.SignedOut>
-          <Login />
-        </db.SignedOut>
+          {/* Default route in a switch */}
+          <Route>404: No such page!</Route>
+        </Switch>
       </MantineProvider>
     </>
   );
