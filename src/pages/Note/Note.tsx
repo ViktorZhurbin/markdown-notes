@@ -66,8 +66,16 @@ const NoteView = ({ noteId, text }: { noteId: number; text: string }) => {
   }, [text]);
 
   /* Instant retried failed writes from its own send queue. fetch does not, so
-     a rejected save is silently lost text unless it is shown. */
-  const [saveError, setSaveError] = useState<Error | null>(null);
+     a rejected save is silently lost text unless it is shown.
+
+     navigator.onLine is captured when the save fails rather than read at
+     render: it answers why this attempt failed, and the connection may already
+     be back by the time the message paints. Without it an outage and a Worker
+     error both read "Failed to fetch". */
+  const [saveError, setSaveError] = useState<{
+    error: Error;
+    offline: boolean;
+  } | null>(null);
 
   const save = useDebouncedCallback(
     (value: string) => {
@@ -75,9 +83,10 @@ const NoteView = ({ noteId, text }: { noteId: number; text: string }) => {
       updateNote(noteId, value)
         .then(() => setSaveError(null))
         .catch((error: unknown) =>
-          setSaveError(
-            error instanceof Error ? error : new Error(String(error)),
-          ),
+          setSaveError({
+            error: error instanceof Error ? error : new Error(String(error)),
+            offline: !navigator.onLine,
+          }),
         );
     },
     /* flushOnUnmount writes the pending edit when leaving the page. Without
@@ -113,14 +122,16 @@ const NoteView = ({ noteId, text }: { noteId: number; text: string }) => {
       />
 
       {saveError &&
-        (isSessionExpired(saveError) ? (
+        (isSessionExpired(saveError.error) ? (
           <ReauthNotice>
             Not saved — you were signed out. Copy your text first; signing in
             reloads the page.
           </ReauthNotice>
         ) : (
           <Text c="red" size="sm" px="xs">
-            Not saved: {saveError.message}
+            {saveError.offline
+              ? "Offline — not saved."
+              : `Not saved: ${saveError.error.message}`}
           </Text>
         ))}
 

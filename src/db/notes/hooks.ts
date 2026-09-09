@@ -1,3 +1,4 @@
+import { useDocumentVisibility } from "@mantine/hooks";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { getNote, listNotes } from "./crud";
 import type { Note } from "./types";
@@ -51,22 +52,20 @@ function useFetchOnFocus<T>(
       });
   }, [fetcher]);
 
+  const visibility = useDocumentVisibility();
+
+  /* useDocumentVisibility reports "visible" on its first render and corrects
+     itself in an effect, so this one effect covers the initial load as well as
+     the refetch on refocus. */
   useEffect(() => {
-    load();
+    if (visibility === "visible") {
+      load();
+    }
+  }, [visibility, load]);
 
-    const onVisible = () => {
-      if (document.visibilityState === "visible") {
-        load();
-      }
-    };
-
-    document.addEventListener("visibilitychange", onVisible);
-
-    return () => {
-      document.removeEventListener("visibilitychange", onVisible);
-      inFlight.current?.abort();
-    };
-  }, [load]);
+  /* Separate from the load effect: a changing `load` needs no abort here,
+     because load() aborts the previous request itself. */
+  useEffect(() => () => inFlight.current?.abort(), []);
 
   return { ...state, refetch: load };
 }
