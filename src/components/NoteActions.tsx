@@ -1,48 +1,51 @@
-import { RichTextEditor } from "@mantine/tiptap";
+import { ActionIcon, Tooltip } from "@mantine/core";
 import { IconEraser, IconTrash } from "@tabler/icons-react";
 import { useState } from "react";
-import { navigate } from "wouter/use-browser-location";
-import { deleteNote, updateNote } from "../db/notes/crud";
 import { ConfirmModal } from "./ConfirmModal";
 
 type PendingAction = "clear" | "delete" | null;
 
-export const NoteActions = ({ noteId }: { noteId: string }) => {
+/* Clearing must go through the same debounced save as typing, or a pending
+   write restores the text. Deleting must cancel that save first, or the
+   flush recreates the row after it's gone. */
+type NoteActionsProps = {
+  onClear: () => void;
+  onDelete: () => void;
+};
+
+export const NoteActions = ({ onClear, onDelete }: NoteActionsProps) => {
   const [pending, setPending] = useState<PendingAction>(null);
 
   const closeModal = () => setPending(null);
 
-  const handleClear = () => {
-    updateNote(noteId, "");
-  };
-
-  const handleDelete = () => {
-    deleteNote(noteId);
-    navigate("/");
-  };
-
   return (
     <>
-      <RichTextEditor.Control
-        aria-label="Clear note"
-        title="Clear note"
-        onClick={() => setPending("clear")}
-      >
-        <IconEraser size={16} />
-      </RichTextEditor.Control>
+      <Tooltip label="Clear note">
+        <ActionIcon
+          variant="default"
+          size="lg"
+          aria-label="Clear note"
+          onClick={() => setPending("clear")}
+        >
+          <IconEraser />
+        </ActionIcon>
+      </Tooltip>
 
-      <RichTextEditor.Control
-        aria-label="Delete note"
-        title="Delete note"
-        onClick={() => setPending("delete")}
-      >
-        <IconTrash size={16} />
-      </RichTextEditor.Control>
+      <Tooltip label="Delete note">
+        <ActionIcon
+          variant="default"
+          size="lg"
+          aria-label="Delete note"
+          onClick={() => setPending("delete")}
+        >
+          <IconTrash />
+        </ActionIcon>
+      </Tooltip>
 
       <ConfirmModal
         opened={pending === "clear"}
         onClose={closeModal}
-        onConfirm={handleClear}
+        onConfirm={onClear}
         title="Clear note"
         message="This removes all content from the note."
         confirmLabel="Clear"
@@ -52,7 +55,7 @@ export const NoteActions = ({ noteId }: { noteId: string }) => {
       <ConfirmModal
         opened={pending === "delete"}
         onClose={closeModal}
-        onConfirm={handleDelete}
+        onConfirm={onDelete}
         title="Delete note"
         message="This can't be undone."
         confirmLabel="Delete"

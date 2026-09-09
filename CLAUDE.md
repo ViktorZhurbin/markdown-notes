@@ -1,11 +1,11 @@
 # markdown-notes
 
-A personal note-taking app with rich-text editing and real-time sync.
+A personal note-taking app: paste raw markdown, read it rendered, copy it back out.
 
 ## Stack
 
 - **React 19** + TypeScript (strict), built with **Rsbuild**
-- **Mantine 9** + **Tiptap 3** via `@mantine/tiptap` — editor stores/serializes content as markdown (`contentType: "markdown"`)
+- **Mantine 9** for UI; **react-markdown** + **remark-gfm** render the preview, wrapped in Mantine's `Typography` for element styling
 - **InstantDB** (`@instantdb/react`) — real-time DB and the only state layer (no Redux/Context/Zustand)
 - **Wouter** for routing, **Biome** for linting/formatting
 - **Bun** as the package manager — use `bun add` / `bun install` instead of npm/yarn
@@ -14,8 +14,8 @@ A personal note-taking app with rich-text editing and real-time sync.
 ## Key patterns
 
 - **InstantDB = state**: `db.useQuery` for reads; all writes go through `db.transact(db.tx...)` in `db/notes/crud.ts`
-- **Editor** (`components/Editor/`): takes `content` (markdown string), `noteId`, `editable`, `onUpdate`, optional `classNames`; syncs external content changes via `useEffect` comparing `content !== editor.getMarkdown()`; extensions centralized in `tiptap/extensions.ts`
-- **CSS Modules + Mantine**: Mantine class selectors inside `.module.css` must use `:global()` (e.g. `:global(.mantine-RichTextEditor-control)`) — without it they get hashed and never match
-- Toolbar action buttons (`NoteActions`, `CopyMdButton`) use `RichTextEditor.Control` so they match the built-in formatting controls; destructive actions route through the shared `ConfirmModal`
+- **A note is a raw markdown string.** Nothing parses it on the way in or out.
+- **CSS Modules + Mantine**: Mantine class selectors inside `.module.css` must use `:global()` — without it they get hashed and never match. To beat Mantine's own single-class styles (injected after the modules), repeat the class: `&:is(.input) { ... }`.
+- Toolbar action buttons are plain `ActionIcon`s with `variant="default"`; destructive actions route through the shared `ConfirmModal`
 - **No non-null assertions** (`!`) — handle optionals explicitly
 - **No `document.createElement`** — use JSX only

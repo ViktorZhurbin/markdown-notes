@@ -1,0 +1,23 @@
+.markdown {
+  /* Long URLs and unbroken tokens in pasted markdown must not widen the page. */
+  overflow-wrap: anywhere;
+}
+
+/*
+ * remark-gfm tags task lists with .contains-task-list. Mantine's Typography
+ * drops its list styles only for Tiptap's [data-type="taskList"], so without
+ * these rules every task item renders a bullet next to its checkbox.
+ */
+.markdown :global(.contains-task-list) {
+  padding-inline-start: 0;
+  list-style: none;
+}
+
+.markdown :global(.task-list-item) input {
+  margin-inline-end: 0.5em;
+}
+
+.tableWrap {
+  overflow-x: auto;
+  margin-bottom: var(--mantine-spacing-md);
+}

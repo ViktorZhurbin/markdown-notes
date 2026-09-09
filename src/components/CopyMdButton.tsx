@@ -1,20 +1,20 @@
-import { CopyButton } from "@mantine/core";
-import { RichTextEditor, useRichTextEditorContext } from "@mantine/tiptap";
+import { ActionIcon, CopyButton, Tooltip } from "@mantine/core";
 import { IconCheck, IconCopy } from "@tabler/icons-react";
 
-export const CopyMdButton = () => {
-  const { editor } = useRichTextEditorContext();
-
-  return (
-    <CopyButton value={editor?.getMarkdown().replace(/&nbsp;/g, "") ?? ""}>
-      {({ copied, copy }) => (
-        <RichTextEditor.Control
-          style={{ color: copied ? "teal" : undefined }}
+export const CopyMdButton = ({ text }: { text: string }) => (
+  <CopyButton value={text}>
+    {({ copied, copy }) => (
+      <Tooltip label={copied ? "Copied" : "Copy markdown"}>
+        <ActionIcon
+          variant="default"
+          size="lg"
+          color={copied ? "teal" : undefined}
+          aria-label="Copy markdown"
           onClick={copy}
         >
           {copied ? <IconCheck /> : <IconCopy />}
-        </RichTextEditor.Control>
-      )}
-    </CopyButton>
-  );
-};
+        </ActionIcon>
+      </Tooltip>
+    )}
+  </CopyButton>
+);

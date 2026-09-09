@@ -1,0 +1,23 @@
+.toolbar {
+  /* :is() raises specificity above Mantine's own Group class, which is
+     injected after the CSS modules. */
+  &:is(.toolbar) {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    max-width: 100dvw;
+    overflow-x: auto;
+    padding: 0.5rem;
+    background-color: light-dark(
+      var(--mantine-color-gray-1),
+      var(--mantine-color-dark-8)
+    );
+  }
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* For Firefox */
+  scrollbar-width: none;
+}

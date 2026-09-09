@@ -1,23 +1,39 @@
 .wrapper {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  flex: 1;
 }
 
 /*
  * Surface ownership (single owner for the frame):
- *   editorRoot    -> the whole frame: background, border, radius, shadow.
- *   editorContent -> transparent so the root's surface shows through.
+ *   pane  -> the whole frame: background, border, radius, shadow, padding.
+ *   input -> transparent so the pane's surface shows through.
  */
 
-.editorRoot {
-  margin: 0 0.5rem;
+.pane {
+  flex: 1;
+  margin: 0 0.5rem 0.5rem;
+  padding: var(--mantine-spacing-md);
   background-color: var(--mantine-color-body);
   border: 1px solid var(--mantine-color-default-border);
   border-radius: var(--mantine-radius-default);
   box-shadow: var(--mantine-shadow-sm);
 }
 
-.editorContent {
-  background-color: transparent;
+.input {
+  /* :is() raises specificity above Mantine's own Input class, which is
+     injected after the CSS modules. */
+  &:is(.input) {
+    min-height: 60dvh;
+    padding: 0;
+    border: none;
+    background-color: transparent;
+    font-family: var(--mantine-font-family-monospace);
+    font-size: var(--mantine-font-size-sm);
+  }
+
+  &:is(.input):focus {
+    border: none;
+    outline: none;
+  }
 }

@@ -1,15 +1,16 @@
-import { ActionIcon, Card } from "@mantine/core";
+import { ActionIcon, Card, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconTrash } from "@tabler/icons-react";
 import { Link } from "wouter";
 import { ConfirmModal } from "../../components/ConfirmModal";
-import { Editor } from "../../components/Editor/Editor";
 import type { Note } from "../../db/instant";
 import { deleteNote } from "../../db/notes/crud";
+import { noteTitle } from "../../utils/markdown";
 import styles from "./NoteCard.module.css";
 
 export const NoteCard = ({ note }: { note: Note }) => {
   const [confirmOpen, { open, close }] = useDisclosure(false);
+  const title = noteTitle(note.text);
 
   return (
     <Card withBorder radius="md" padding="md" className={styles.card}>
@@ -17,16 +18,13 @@ export const NoteCard = ({ note }: { note: Note }) => {
           still work) while the delete control sits above it via z-index. */}
       <Link
         href={`/${note.id}`}
-        aria-label="Open note"
+        aria-label={`Open note: ${title || "Empty note"}`}
         className={styles.link}
       />
 
-      <Editor
-        noteId={note.id}
-        content={note.text}
-        editable={false}
-        classNames={{ root: styles.editorRoot, content: styles.editorContent }}
-      />
+      <Text className={styles.title} fw={500} c={title ? undefined : "dimmed"}>
+        {title || "Empty note"}
+      </Text>
 
       <ActionIcon
         className={styles.deleteButton}

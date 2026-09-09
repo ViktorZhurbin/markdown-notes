@@ -1,5 +1,4 @@
 import "@mantine/core/styles.css";
-import "@mantine/tiptap/styles.css";
 import "./global.css";
 
 import { StrictMode } from "react";

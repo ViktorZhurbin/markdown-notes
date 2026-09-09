@@ -1,7 +1,5 @@
 .card {
   position: relative;
-  max-height: 160px;
-  overflow: hidden;
   cursor: pointer;
   box-shadow: var(--mantine-shadow-sm);
   transition:
@@ -27,23 +25,17 @@
   z-index: 1;
 }
 
+.title {
+  /* Keeps the title clear of the delete button in the corner. */
+  padding-right: 32px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .deleteButton {
   position: absolute;
   top: 8px;
   right: 8px;
   z-index: 2;
-}
-
-.editorRoot {
-  border: unset;
-
-  :global(.tiptap.ProseMirror) {
-    padding: 0;
-    /* Keep preview text clear of the delete button in the corner. */
-    padding-right: 28px;
-  }
-}
-
-.editorContent {
-  background-color: transparent;
 }
