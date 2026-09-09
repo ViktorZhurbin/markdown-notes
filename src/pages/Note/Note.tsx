@@ -1,4 +1,4 @@
-import { Textarea } from "@mantine/core";
+import { Text, Textarea } from "@mantine/core";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { useEffect, useRef, useState } from "react";
 import { navigate } from "wouter/use-browser-location";
@@ -60,10 +60,18 @@ const NoteView = ({ noteId, text }: { noteId: number; text: string }) => {
     }
   }, [text]);
 
+  /* Instant retried failed writes from its own send queue. fetch does not, so
+     a rejected save is silently lost text unless it is shown. */
+  const [saveError, setSaveError] = useState<string | null>(null);
+
   const save = useDebouncedCallback(
     (value: string) => {
       lastSentRef.current = value;
-      updateNote(noteId, value);
+      updateNote(noteId, value)
+        .then(() => setSaveError(null))
+        .catch((error: unknown) =>
+          setSaveError(error instanceof Error ? error.message : String(error)),
+        );
     },
     /* flushOnUnmount writes the pending edit when leaving the page. Without
        it the hook cancels instead, and going back to the list within the
@@ -78,12 +86,13 @@ const NoteView = ({ noteId, text }: { noteId: number; text: string }) => {
     save(value);
   };
 
-  /* Cancel first: the flush on unmount would otherwise re-create the row this
-     just deleted. */
+  /* Cancel first, or the flush on unmount sends a PUT against the deleted row
+     and paints a 404 in saveError. Awaiting the DELETE matters too: navigate()
+     mounts NoteList, which immediately issues GET /api/notes, and running that
+     alongside an in-flight DELETE can list the note as still there. */
   const handleDelete = () => {
     save.cancel();
-    deleteNote(noteId);
-    navigate("/");
+    deleteNote(noteId).then(() => navigate("/"));
   };
 
   return (
@@ -95,6 +104,12 @@ const NoteView = ({ noteId, text }: { noteId: number; text: string }) => {
         onClear={() => handleChange("")}
         onDelete={handleDelete}
       />
+
+      {saveError && (
+        <Text c="red" size="sm" px="xs">
+          Not saved: {saveError}
+        </Text>
+      )}
 
       {mode === "edit" ? (
         <Textarea
