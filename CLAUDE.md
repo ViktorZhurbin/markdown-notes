@@ -33,5 +33,7 @@ then overwrites.
 *before* pushing the code that needs the new column, or the deployed Worker
 returns 500 for every `/api` call.
 
-Local dev needs both processes: `bun dev` (rsbuild, HMR) and `bunx wrangler dev`
-(port 8787, holds the D1 binding). `rsbuild.config.ts` proxies `/api` to it.
+`bun dev` runs both processes with `bun run --parallel`: `dev:web` (rsbuild on
+5173, HMR) and `dev:api` (`wrangler dev` on 8787, holds the D1 binding).
+`rsbuild.config.ts` proxies `/api` to 8787, so the browser only ever talks to
+5173. Ctrl-C stops both.
