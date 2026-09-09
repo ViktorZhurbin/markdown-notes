@@ -4,7 +4,17 @@
 <head>
 	<meta charset="UTF-8" />
 	<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+	<meta name="color-scheme" content="light dark" />
+	<!--
+      Android colors the status bar from theme-color, falling back to
+      manifest.json's theme_color, which is white. These two override it per
+      scheme so a dark-mode launch does not get a white bar. Values are
+      Mantine's default --mantine-color-body per scheme.
+    -->
+	<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+	<meta name="theme-color" content="#1a1b1e" media="(prefers-color-scheme: dark)" />
+
 	<title>My notes</title>
 </head>
 
