@@ -41,11 +41,13 @@ function useFetchOnFocus<T>(
           return;
         }
 
-        setState({
-          data: undefined,
+        // A refetch that fails keeps the data it already had. Clearing it
+        // unmounts NoteView and takes the unsaved draft with it.
+        setState((prev) => ({
+          data: prev.data,
           isLoading: false,
           error: error instanceof Error ? error : new Error(String(error)),
-        });
+        }));
       });
   }, [fetcher]);
 

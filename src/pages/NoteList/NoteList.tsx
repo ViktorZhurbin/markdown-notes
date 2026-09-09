@@ -1,6 +1,8 @@
 import { Affix, Group, Stack } from "@mantine/core";
 import { CreateButton } from "../../components/CreateButton";
+import { ReauthNotice } from "../../components/ReauthNotice";
 import { ThemeToggle } from "../../components/ThemeToggle/ThemeToggle";
+import { isSessionExpired } from "../../db/notes/crud";
 import { useNotes } from "../../db/notes/hooks";
 import { NoteCard } from "./NoteCard";
 
@@ -11,8 +13,12 @@ export const NoteList = () => {
     return "Loading...";
   }
 
-  if (error) {
-    return <div>Error querying data: {error.message}</div>;
+  if (error && !data) {
+    return isSessionExpired(error) ? (
+      <ReauthNotice>You were signed out.</ReauthNotice>
+    ) : (
+      <div>Error querying data: {error.message}</div>
+    );
   }
 
   return (

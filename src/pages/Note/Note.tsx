@@ -7,7 +7,8 @@ import {
   type NoteMode,
   NoteToolbar,
 } from "../../components/NoteToolbar/NoteToolbar";
-import { deleteNote, updateNote } from "../../db/notes/crud";
+import { ReauthNotice } from "../../components/ReauthNotice";
+import { deleteNote, isSessionExpired, updateNote } from "../../db/notes/crud";
 import { useNote } from "../../db/notes/hooks";
 import styles from "./Note.module.css";
 
@@ -33,8 +34,12 @@ const NoteLoader = ({ noteId }: { noteId: number }) => {
     return "Loading...";
   }
 
-  if (error) {
-    return <div>Error querying data: {error.message}</div>;
+  if (error && !data) {
+    return isSessionExpired(error) ? (
+      <ReauthNotice>You were signed out.</ReauthNotice>
+    ) : (
+      <div>Error querying data: {error.message}</div>
+    );
   }
 
   if (!data) {
@@ -62,7 +67,7 @@ const NoteView = ({ noteId, text }: { noteId: number; text: string }) => {
 
   /* Instant retried failed writes from its own send queue. fetch does not, so
      a rejected save is silently lost text unless it is shown. */
-  const [saveError, setSaveError] = useState<string | null>(null);
+  const [saveError, setSaveError] = useState<Error | null>(null);
 
   const save = useDebouncedCallback(
     (value: string) => {
@@ -70,7 +75,9 @@ const NoteView = ({ noteId, text }: { noteId: number; text: string }) => {
       updateNote(noteId, value)
         .then(() => setSaveError(null))
         .catch((error: unknown) =>
-          setSaveError(error instanceof Error ? error.message : String(error)),
+          setSaveError(
+            error instanceof Error ? error : new Error(String(error)),
+          ),
         );
     },
     /* flushOnUnmount writes the pending edit when leaving the page. Without
@@ -105,11 +112,17 @@ const NoteView = ({ noteId, text }: { noteId: number; text: string }) => {
         onDelete={handleDelete}
       />
 
-      {saveError && (
-        <Text c="red" size="sm" px="xs">
-          Not saved: {saveError}
-        </Text>
-      )}
+      {saveError &&
+        (isSessionExpired(saveError) ? (
+          <ReauthNotice>
+            Not saved — you were signed out. Copy your text first; signing in
+            reloads the page.
+          </ReauthNotice>
+        ) : (
+          <Text c="red" size="sm" px="xs">
+            Not saved: {saveError.message}
+          </Text>
+        ))}
 
       {mode === "edit" ? (
         <Textarea

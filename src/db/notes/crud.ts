@@ -2,7 +2,29 @@ import type { Note } from "./types";
 
 const BASE = "/api/notes";
 
+/* Cloudflare Access answers an expired session with a 302 to a
+   cloudflareaccess.com login page. Following that redirect is a cross-origin
+   request the CORS check blocks, so a default fetch rejects with the same
+   `TypeError: Failed to fetch` as a dead network — and a replay queue cannot
+   tell "retry later" from "retrying will never work". redirect: "manual" leaves
+   the redirect unfollowed and yields an opaqueredirect response instead, which
+   is distinguishable. Nothing in this API redirects otherwise. */
+const NO_REDIRECT = { redirect: "manual" } as const;
+
+const SESSION_EXPIRED = "SessionExpired";
+
+export const isSessionExpired = (error: unknown): boolean =>
+  error instanceof Error && error.name === SESSION_EXPIRED;
+
 function check(response: Response): Response {
+  if (response.type === "opaqueredirect") {
+    // An opaque response has no status or body to report, only the fact of it.
+    const error = new Error("Session expired");
+    error.name = SESSION_EXPIRED;
+
+    throw error;
+  }
+
   if (!response.ok) {
     throw new Error(`${response.status} ${response.statusText}`);
   }
@@ -22,14 +44,14 @@ async function parse<T>(response: Response): Promise<T> {
 const KEEPALIVE_MAX_BYTES = 60_000;
 
 export function listNotes(signal?: AbortSignal): Promise<Note[]> {
-  return fetch(BASE, { signal }).then(parse<Note[]>);
+  return fetch(BASE, { ...NO_REDIRECT, signal }).then(parse<Note[]>);
 }
 
 export async function getNote(
   id: number,
   signal?: AbortSignal,
 ): Promise<Note | null> {
-  const response = await fetch(`${BASE}/${id}`, { signal });
+  const response = await fetch(`${BASE}/${id}`, { ...NO_REDIRECT, signal });
 
   if (response.status === 404) {
     return null;
@@ -39,13 +61,14 @@ export async function getNote(
 }
 
 export function addNote(): Promise<Note> {
-  return fetch(BASE, { method: "POST" }).then(parse<Note>);
+  return fetch(BASE, { ...NO_REDIRECT, method: "POST" }).then(parse<Note>);
 }
 
 export function updateNote(id: number, text: string): Promise<Response> {
   const body = JSON.stringify({ text });
 
   return fetch(`${BASE}/${id}`, {
+    ...NO_REDIRECT,
     method: "PUT",
     headers: { "content-type": "application/json" },
     body,
@@ -57,7 +80,9 @@ export function updateNote(id: number, text: string): Promise<Response> {
 }
 
 export function deleteNote(id: number): Promise<Response> {
-  return fetch(`${BASE}/${id}`, { method: "DELETE", keepalive: true }).then(
-    check,
-  );
+  return fetch(`${BASE}/${id}`, {
+    ...NO_REDIRECT,
+    method: "DELETE",
+    keepalive: true,
+  }).then(check);
 }
