@@ -9,11 +9,24 @@ import {
 } from "../../components/NoteToolbar/NoteToolbar";
 import { ReauthNotice } from "../../components/ReauthNotice";
 import { type SaveState, SaveStatus } from "../../components/SaveStatus";
-import { deleteNote, isSessionExpired, updateNote } from "../../db/notes/crud";
+import {
+  deleteNote,
+  isRetryable,
+  isSessionExpired,
+  updateNote,
+} from "../../db/notes/crud";
 import { useNote } from "../../db/notes/hooks";
 import styles from "./Note.module.css";
 
 const SAVE_DELAY_MS = 500;
+
+// Attempted before the error ever reaches saveState/the user. A network blip
+// or a Worker 500 usually clears within a couple of seconds; a 4xx or an
+// expired session won't, so isRetryable() skips these delays for those.
+const RETRY_DELAYS_MS = [500, 1500, 4000];
+
+const sleep = (ms: number) =>
+  new Promise<void>((resolve) => setTimeout(resolve, ms));
 
 /* Route params are strings; ids are the INTEGER primary key. Validating in a
    wrapper keeps useNote out of the invalid case entirely — a hook inside the
@@ -77,18 +90,30 @@ const NoteView = ({ noteId, text }: { noteId: number; text: string }) => {
      error both read "Failed to fetch". */
   const [saveState, setSaveState] = useState<SaveState>({ kind: "saved" });
 
-  const attemptSave = (value: string) => {
+  const attemptSave = async (value: string) => {
     lastSentRef.current = value;
     setSaveState({ kind: "saving" });
-    updateNote(noteId, value)
-      .then(() => setSaveState({ kind: "saved" }))
-      .catch((error: unknown) =>
-        setSaveState({
-          kind: "error",
-          error: error instanceof Error ? error : new Error(String(error)),
-          offline: !navigator.onLine,
-        }),
-      );
+
+    for (let attempt = 0; ; attempt++) {
+      try {
+        await updateNote(noteId, value);
+        setSaveState({ kind: "saved" });
+        return;
+      } catch (error) {
+        const delay = RETRY_DELAYS_MS[attempt];
+
+        if (delay === undefined || !isRetryable(error)) {
+          setSaveState({
+            kind: "error",
+            error: error instanceof Error ? error : new Error(String(error)),
+            offline: !navigator.onLine,
+          });
+          return;
+        }
+
+        await sleep(delay);
+      }
+    }
   };
 
   const save = useDebouncedCallback(

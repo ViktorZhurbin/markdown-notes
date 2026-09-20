@@ -16,6 +16,29 @@ const SESSION_EXPIRED = "SessionExpired";
 export const isSessionExpired = (error: unknown): boolean =>
   error instanceof Error && error.name === SESSION_EXPIRED;
 
+// Carries the status code so callers can tell "the Worker or D1 hiccuped"
+// (5xx, worth retrying) from "this request will never succeed" (4xx, e.g. a
+// PUT against a row deleted from another tab) without re-parsing message text.
+export class HttpError extends Error {
+  constructor(
+    public status: number,
+    statusText: string,
+  ) {
+    super(`${status} ${statusText}`);
+  }
+}
+
+// A network failure (offline, DNS, CORS) throws a plain TypeError with no
+// status at all — that's retryable too, same as a 5xx. Only a session expiry
+// or a 4xx response are excluded, since those won't change on retry.
+export const isRetryable = (error: unknown): boolean => {
+  if (isSessionExpired(error)) {
+    return false;
+  }
+
+  return !(error instanceof HttpError) || error.status >= 500;
+};
+
 function check(response: Response): Response {
   if (response.type === "opaqueredirect") {
     // An opaque response has no status or body to report, only the fact of it.
@@ -26,7 +49,7 @@ function check(response: Response): Response {
   }
 
   if (!response.ok) {
-    throw new Error(`${response.status} ${response.statusText}`);
+    throw new HttpError(response.status, response.statusText);
   }
 
   return response;
